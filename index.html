@@ -1065,10 +1065,15 @@ ${recipe.notes ? `## 요리 팁 & 메모\n> ${recipe.notes}\n` : ''}
 
       if (!text) return result;
 
-      // 1. Check Frontmatter
+      const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+      if (lines.length === 0) return result;
+
+      // 1. Check Frontmatter (YAML)
       const fmMatch = text.match(/^---\s*\n([\s\S]*?)\n---/);
       let bodyText = text;
+      let hasFrontmatter = false;
       if (fmMatch) {
+        hasFrontmatter = true;
         const fmContent = fmMatch[1];
         bodyText = text.replace(fmMatch[0], '');
 
@@ -1090,48 +1095,108 @@ ${recipe.notes ? `## 요리 팁 & 메모\n> ${recipe.notes}\n` : ''}
         }
       }
 
-      // 2. Title from # H1 if missing
-      if (!result.title) {
-        const h1Match = bodyText.match(/^#\s+(.+)$/m);
-        if (h1Match) result.title = h1Match[1].trim();
-      }
-
-      // 3. Extract Ingredients from body (e.g. ## 재료 or - [[재료]])
+      // 2. Check for explicit headers (## 재료 / ## 조리 순서)
       const ingSectionMatch = bodyText.match(/##\s*(?:재료|준비|준비\s*재료|Ingredients)[\s\S]*?(?=##|$)/i);
-      if (ingSectionMatch) {
-        const lines = ingSectionMatch[0].split('\n').filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'));
-        if (lines.length > 0) {
-          result.ingredients = lines.map(l => l.replace(/^[-*]\s*/, '').replace(/\[\[|\]\]/g, '').trim());
-        }
-      } else if (result.ingredients.length === 0) {
-        // Fallback: search all [[wiki]] links
-        const wikiMatches = bodyText.match(/\[\[(.*?)\]\]/g);
-        if (wikiMatches) {
-          result.ingredients = wikiMatches.map(w => w.replace(/\[\[|\]\]/g, '').trim());
-        }
-      }
-
-      // 4. Extract Steps from body (e.g. ## 조리 순서 or 1. 2. 3.)
       const stepSectionMatch = bodyText.match(/##\s*(?:조리\s*순서|만드는\s*법|조리법|순서|Steps)[\s\S]*?(?=##|$)/i);
-      if (stepSectionMatch) {
-        const lines = stepSectionMatch[0].split('\n').filter(l => /^\d+\./.test(l.trim()));
-        if (lines.length > 0) {
-          result.steps = lines.map(l => l.replace(/^\d+\.\s*/, '').trim());
-        }
-      }
 
-      // 5. Fallback if no numbered steps found
-      if (result.steps.length === 0) {
-        const numLines = bodyText.split('\n').filter(l => /^\d+\./.test(l.trim()));
-        if (numLines.length > 0) {
-          result.steps = numLines.map(l => l.replace(/^\d+\.\s*/, '').trim());
+      if (ingSectionMatch || stepSectionMatch || hasFrontmatter) {
+        if (!result.title) {
+          const h1Match = bodyText.match(/^#\s+(.+)$/m);
+          if (h1Match) result.title = h1Match[1].trim();
+          else if (lines.length > 0) result.title = lines[0].replace(/^#+\s*/, '').trim();
         }
-      }
 
-      // 6. Notes
-      const notesMatch = bodyText.match(/##\s*(?:팁|메모|참고|Notes)[\s\S]*?(?=##|$)/i);
-      if (notesMatch) {
-        result.notes = notesMatch[0].replace(/^##.*?\n/, '').replace(/^>\s*/gm, '').trim();
+        if (ingSectionMatch) {
+          const ingLines = ingSectionMatch[0].split('\n').filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'));
+          if (ingLines.length > 0) {
+            result.ingredients = ingLines.map(l => l.replace(/^[-*]\s*/, '').replace(/\[\[|\]\]/g, '').trim());
+          }
+        } else if (result.ingredients.length === 0) {
+          const wikiMatches = bodyText.match(/\[\[(.*?)\]\]/g);
+          if (wikiMatches) {
+            result.ingredients = wikiMatches.map(w => w.replace(/\[\[|\]\]/g, '').trim());
+          }
+        }
+
+        if (stepSectionMatch) {
+          const stepLines = stepSectionMatch[0].split('\n').filter(l => /^\d+\./.test(l.trim()));
+          if (stepLines.length > 0) {
+            result.steps = stepLines.map(l => l.replace(/^\d+\.\s*/, '').trim());
+          }
+        }
+        if (result.steps.length === 0) {
+          const numLines = bodyText.split('\n').filter(l => /^\d+\./.test(l.trim()));
+          if (numLines.length > 0) {
+            result.steps = numLines.map(l => l.replace(/^\d+\.\s*/, '').trim());
+          }
+        }
+
+        const notesMatch = bodyText.match(/##\s*(?:팁|메모|참고|Notes)[\s\S]*?(?=##|$)/i);
+        if (notesMatch) {
+          result.notes = notesMatch[0].replace(/^##.*?\n/, '').replace(/^>\s*/gm, '').trim();
+        }
+      } else {
+        // 3. Natural Everyday Recipe Format (like user's notepad/obsidian style!)
+        result.title = lines[0].replace(/^[#\s]+/, '').trim();
+
+        const verbEndings = ['한다', '볶는다', '섞는다', '끓인다', '넣는다', '끝', '준다', '굽는다', '담는다', '뺀다', '썬다', '부친다', '졸인다', '익힌다', '둔다', '바른다', '버무린다', '마친다', '올린다', '식힌다'];
+        const noteKeywords = ['계량', '팁', '메모', '참고', '주의', '보관', '밥수저'];
+        const notesArr = [];
+        let inNotesBlock = false;
+
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i];
+
+          // Skip pure horizontal rule / divider lines (ㅡㅡㅡ, ---, ===, ***)
+          if (/^[ㅡ\-=_*~\s]{1,}$/.test(line)) {
+            continue;
+          }
+
+          // Check if this line starts or belongs to note block
+          const isNoteLine = noteKeywords.some(k => line.includes(k));
+          if (isNoteLine) {
+            inNotesBlock = true;
+            notesArr.push(line);
+            continue;
+          }
+
+          if (inNotesBlock) {
+            const isVerb = verbEndings.some(v => line.endsWith(v));
+            if (isVerb || line.length > 28) {
+              inNotesBlock = false;
+            } else {
+              notesArr.push(line);
+              continue;
+            }
+          }
+
+          // Check if cooking step
+          const isNumbered = /^\d+[\.\)]\s*/.test(line);
+          const isVerbEnding = verbEndings.some(v => line.endsWith(v));
+          const hasCookingConnectors = (line.includes('고,') || line.includes('볶다가') || line.includes('넣고') || line.includes('식었을 때') || line.includes('후에') || line.includes('불을'));
+
+          if (isNumbered || isVerbEnding || (line.length > 20 && hasCookingConnectors)) {
+            const cleanStep = line.replace(/^\d+[\.\)]\s*/, '').trim();
+            result.steps.push(cleanStep);
+          } else {
+            // Ingredient / seasoning line
+            result.ingredients.push(line);
+          }
+        }
+
+        if (notesArr.length > 0) {
+          result.notes = notesArr.join('\n');
+        }
+
+        // Smart Category Detection
+        const fullContent = text.toLowerCase();
+        if (fullContent.includes('파스타') || fullContent.includes('버터') || fullContent.includes('바질') || fullContent.includes('치즈') || fullContent.includes('올리브오일') || fullContent.includes('스테이크')) {
+          result.category = '양식';
+        } else if (fullContent.includes('된장') || fullContent.includes('간장') || fullContent.includes('고추장') || fullContent.includes('김치') || fullContent.includes('멸치') || fullContent.includes('참기름') || fullContent.includes('꽈리고추') || fullContent.includes('마늘')) {
+          result.category = '한식';
+        } else if (fullContent.includes('우동') || fullContent.includes('초밥') || fullContent.includes('라멘') || fullContent.includes('짜장') || fullContent.includes('짬뽕')) {
+          result.category = '일식/중식';
+        }
       }
 
       return result;
