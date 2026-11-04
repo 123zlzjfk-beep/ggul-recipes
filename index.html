@@ -31,25 +31,12 @@
             <h1 class="font-bold text-lg text-stone-900 tracking-tight">나만의 레시피북</h1>
             <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Recipe Vault</span>
           </div>
-          <p class="text-xs text-stone-500 hidden sm:block">옵시디언 메모 연동 & 웹 직접 작성 지원</p>
+          <p class="text-xs text-stone-500 hidden sm:block">맛있는 순간들을 기록하는 나만의 요리 서재</p>
         </div>
       </div>
 
       <!-- Actions -->
       <div class="flex items-center gap-2">
-        <button id="btn-open-obsidian" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors" title="옵시디언 마크다운 붙여넣기로 가져오기">
-          <svg class="w-4 h-4 text-purple-600" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L4 6v12l8 4 8-4V6l-8-4zm0 2.2l6 3v9.6l-6 3-6-3V7.2l6-3z"/>
-          </svg>
-          <span class="hidden md:inline">옵시디언</span> 가져오기
-        </button>
-
-        <button id="btn-download-html" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 rounded-lg transition-colors shadow-xs" title="GitHub 업로드용 index.html 파일 다운로드">
-          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-          </svg>
-          <span>index.html 받기</span>
-        </button>
         <button id="btn-open-share" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors" title="웹사이트 배포 & 공유 방법">
           <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -415,57 +402,6 @@
         </div>
 
       </form>
-    </div>
-  </div>
-
-  <!-- Obsidian Memo Importer Modal -->
-  <div id="modal-obsidian" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 hidden overflow-y-auto">
-    <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col border border-stone-100">
-      
-      <div class="p-5 bg-purple-700 text-white flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v12l8 4 8-4V6l-8-4zm0 2.2l6 3v9.6l-6 3-6-3V7.2l6-3z"/></svg>
-          <div>
-            <h3 class="text-lg font-bold">옵시디언 마크다운 가져오기</h3>
-            <p class="text-xs text-purple-200">옵시디언 노트를 복사해서 붙여넣으면 레시피로 자동 변환됩니다.</p>
-          </div>
-        </div>
-        <button id="btn-close-obsidian" type="button" class="p-1.5 rounded-lg hover:bg-purple-800 text-white transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-      </div>
-
-      <div class="p-5 space-y-4 overflow-y-auto flex-1 text-sm text-stone-700">
-        <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="block font-semibold text-stone-800" for="obsidian-input">옵시디언 마크다운 본문</label>
-            <label class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-1 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg text-xs font-semibold transition-colors">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l4-4m0 0l4 4m-4-4v12" /></svg>
-              <span>📁 내 컴퓨터에서 .md 파일 선택</span>
-              <input type="file" id="input-obsidian-file" accept=".md,.txt" class="hidden">
-            </label>
-          </div>
-          <textarea id="obsidian-input" rows="8" placeholder="옵시디언에서 작성한 레시피 노트를 그대로 붙여넣으세요.&#10;&#10;예시:&#10;---&#10;title: 된장찌개&#10;category: 한식&#10;ingredients: [된장, 두부, 호박, 양파]&#10;---&#10;## 준비 재료&#10;- [[된장]] 2큰술&#10;- [[두부]] 1/2모&#10;&#10;## 조리 순서&#10;1. 물을 끓이고 된장을 풉니다.&#10;2. 야채를 넣고 끓입니다." class="w-full font-mono text-xs p-3.5 rounded-xl border border-stone-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none leading-relaxed"></textarea>
-        </div>
-
-        <div class="p-3 bg-purple-50 rounded-xl text-xs text-purple-800 space-y-1">
-          <p class="font-semibold">💡 스마트 자동 감지 기능:</p>
-          <p>• 상단 YAML 프론트매터(<code>title:</code>, <code>ingredients:</code>) 자동 인식</p>
-          <p>• 위키링크 형태(<code>[[양파]]</code>, <code>[[대파]]</code>)에서 재료명 자동 추출</p>
-          <p>• <code>## 재료</code>, <code>## 조리 순서</code> 등의 헤더 구획 자동 분류</p>
-        </div>
-
-        <div class="flex items-center justify-end gap-2 pt-2">
-          <button id="btn-load-sample-md" type="button" class="px-3 py-2 text-xs font-semibold text-purple-700 bg-purple-100 hover:bg-purple-200 rounded-xl transition-colors">
-            예시 붙여넣기
-          </button>
-          <button id="btn-parse-obsidian" type="button" class="px-5 py-2 font-semibold text-white bg-purple-700 hover:bg-purple-800 rounded-xl shadow-sm transition-all flex items-center gap-1.5">
-            <span>레시피로 변환하기</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-          </button>
-        </div>
-      </div>
-
     </div>
   </div>
 
@@ -864,6 +800,199 @@
             "notes": "계량 기준: 1스푼 = 10ml = 밥수저. 올리고당과 참기름은 불을 끄고 식힌 뒤 넣어야 굳지 않고 윤기가 유지됩니다."
       },
       {
+            "id": "recipe-user-11",
+            "title": "특제 육회 & 소스",
+            "category": "한식",
+            "time": "10분",
+            "servings": 2,
+            "difficulty": "쉬움",
+            "favorite": true,
+            "img": "",
+            "ingredients": [
+                  "소고기 육회용(우둔살 또는 홍두깨살) 300~600g",
+                  "소금 0.5큰술(또는 맛소금)",
+                  "설탕 1큰술",
+                  "후추 5번 톡톡",
+                  "채 썬 마늘 1큰술",
+                  "참기름 1큰술",
+                  "통깨 1큰술",
+                  "배 1/2개(선택)",
+                  "계란 노른자 1개(선택)"
+            ],
+            "steps": [
+                  "키친타월로 육회용 소고기의 핏물을 꼼꼼히 닦아냅니다.",
+                  "볼에 소금 0.5T(또는 맛소금), 설탕 1T, 후추 5번 톡톡, 채 썬 마늘 1T, 참기름 1T, 통깨 1T를 넣고 설탕이 녹도록 고루 섞어 소스를 만듭니다.",
+                  "준비한 소고기에 소스를 붓고, 손의 체온이 고기에 닿지 않도록 젓가락이나 장갑을 끼고 빠르고 가볍게 조물조물 무쳐냅니다.",
+                  "접시에 가늘게 채 썬 배를 깔고 그 위에 육회를 소복하게 얹은 뒤, 계란 노른자를 올려 완성합니다."
+            ],
+            "notes": "고기 300g 기준이며, 600g 조리 시 소스 양을 1.5~2배로 늘려주세요. 다진 마늘 대신 가늘게 채 썬 마늘을 써야 알싸하고 깔끔합니다."
+      },
+      {
+            "id": "recipe-user-12",
+            "title": "캐러멜라이징 일식 카레",
+            "category": "일식/중식",
+            "time": "25분",
+            "servings": 3,
+            "difficulty": "쉬움",
+            "favorite": true,
+            "img": "",
+            "ingredients": [
+                  "양파 1개 반",
+                  "소고기(또는 돼지고기) 200~300g",
+                  "일본 고형카레 4조각",
+                  "물 600~700ml",
+                  "올리브유",
+                  "설탕 1작은술",
+                  "버터 1조각",
+                  "다크 초콜릿 1조각(선택)",
+                  "소금",
+                  "후추"
+            ],
+            "steps": [
+                  "양파 1개 반을 가늘게 채 썰어 내열용기에 담고, 전자레인지에 4분간 돌려 수분을 미리 날립니다.",
+                  "달군 팬에 올리브유를 두르고 양파와 후추를 넣어 볶다가, 5분 후 설탕을 살짝 뿌려 3~4분 더 볶아 짙은 갈색(까무잡잡)이 될 때까지 캐러멜라이징합니다.",
+                  "한 입 크기로 썬 고기 200~300g을 넣고 소금, 후추로 간하여 겉면이 익을 때까지 함께 볶습니다.",
+                  "물 600~700ml를 붓고 끓어오르면 불을 줄인 뒤, 고형카레 4조각을 넣어 덩어리지지 않게 완전히 풀어줍니다.",
+                  "약불에서 뭉근하게 저어가며 끓이다가, 마지막에 버터 1조각과 다크초콜릿 1조각을 넣어 깊은 풍미와 윤기를 더해 완성합니다."
+            ],
+            "notes": "양파를 전자레인지에 먼저 4분 돌려 수분을 빼면 30분 걸리는 캐러멜라이징을 7~8분 만에 끝낼 수 있습니다. 마지막 버터와 초콜릿은 일식 전문점 카레의 비밀 킥입니다."
+      },
+      {
+            "id": "recipe-user-13",
+            "title": "수제 수비드 잠봉 & 잠봉뵈르",
+            "category": "양식",
+            "time": "5일 염지 + 수비드 4시간",
+            "servings": 6,
+            "difficulty": "어려움",
+            "favorite": true,
+            "img": "",
+            "ingredients": [
+                  "돼지 통전지(앞다리살) 1kg",
+                  "물 500g",
+                  "피클링솔트 8.3g",
+                  "정제염(소금) 16.7g",
+                  "치킨파우더 10g",
+                  "미원 2g",
+                  "설탕 63g",
+                  "치아바타(또는 바게트)",
+                  "고급 무염버터",
+                  "트러플 머스터드 마요네즈",
+                  "캔 할라피뇨",
+                  "소금",
+                  "후추"
+            ],
+            "steps": [
+                  "[염지액 제조]: 물 500g에 피클링솔트 8.3g, 소금 16.7g, 치킨파우더 10g, 미원 2g, 설탕 63g을 넣고 완전히 녹여 염지액을 만듭니다.",
+                  "[침지 염지]: 통전지 1kg을 진공팩에 담고 염지액을 부어 진공 포장한 뒤, 냉장고에서 정확히 5일간 숙성 염지합니다.",
+                  "[세척 및 건조]: 5일 후 고기를 꺼내 차가운 흐르는 물에 겉면의 염지액을 깨끗이 씻어내고 키친타월로 수분을 완벽하게 닦습니다.",
+                  "[수비드 조리]: 고기를 다시 단단하게 진공 포장하여 수비드 수조 65°C에서 4시간 동안 조리합니다.",
+                  "[칠링 및 슬라이스]: 조리가 끝나면 즉시 얼음물에 담가 차갑게 식힌 뒤(칠링), 육절기나 잘 드는 칼로 종이처럼 최대한 얇게 슬라이스합니다.",
+                  "[잠봉뵈르 완성]: 반으로 가른 치아바타에 고급 무염버터를 도톰하게 썰어 깔고, 얇게 썬 잠봉을 풍성하게 접어 넣은 뒤 트러플 머스터드 마요와 할라피뇨를 곁들여 완성합니다."
+            ],
+            "notes": "피클링솔트는 잠봉 특유의 핑크빛 색상과 보존성을 담당합니다. 수비드 후 반드시 완벽히 차게 칠링해야 얇게 썰립니다. (치미추리 소스 버거로도 응용 가능)"
+      },
+      {
+            "id": "recipe-user-14",
+            "title": "페스츄리 생지 베이킹 4종",
+            "category": "간식/베이킹",
+            "time": "20분",
+            "servings": 4,
+            "difficulty": "쉬움",
+            "favorite": true,
+            "img": "",
+            "ingredients": [
+                  "사각 퍼프 페스츄리 생지 (맨치트)",
+                  "양념 소불고기 300g",
+                  "살루메리아 초리조 소세지 2개",
+                  "천도복숭아 3개",
+                  "캠벨 클램차우더 스프 1캔",
+                  "모짜렐라 치즈",
+                  "계란물(노른자 1개 + 물 1스푼)",
+                  "양파 1/2개",
+                  "팽이버섯 1/2개",
+                  "할라피뇨 10g",
+                  "우유 200ml",
+                  "초당옥수수 20g",
+                  "버터 30g",
+                  "설탕 20g",
+                  "간장 5g",
+                  "케첩 + 치폴레 타바스코"
+            ],
+            "steps": [
+                  "[불고기 베이크]: 불고기와 양파, 팽이버섯을 볶아 식힌 뒤, 얇게 민 생지 위에 불고기, 할라피뇨, 모짜렐라를 얹고 계란물을 발라 다른 생지로 덮고 돌돌 말아 겉면에 계란물을 발라 오븐 180°C에서 10분 굽습니다.",
+                  "[스프 앙쿠르트]: 오븐용 볼에 클램차우더 스프와 우유 200ml, 초당옥수수를 섞어 담고, 볼 입구를 페스츄리 생지로 팽팽하게 덮은 뒤 계란물을 발라 180°C에서 10분간 빵빵하게 부풀려 굽습니다.",
+                  "[초리조 소세지롤]: 생지를 길게 밀어 초리조 소세지를 단단히 만 뒤 드라이 바질을 뿌리고 계란물을 발라 180°C에서 10분 굽고, 케첩+치폴레 타바스코 딥에 찍어 먹습니다.",
+                  "[복숭아 타르트 타탱]: 팬에 버터 30g, 설탕 20g, 간장 5g을 끓여 간장 캐러멜을 만들고 썬 천도복숭아를 넣어 코팅합니다. 포크로 구멍 뚫은 생지를 복숭아 위에 덮어 200°C에서 7분 굽고 접시를 얹어 확 뒤집어 담아냅니다."
+            ],
+            "notes": "냉동 생지는 사용 10~15분 전 실온에 꺼내두면 다루기 쉬워집니다. 계란물을 발라주면 구웠을 때 황금빛 윤기가 돕니다."
+      },
+      {
+            "id": "recipe-user-15",
+            "title": "만능 숙성 회 다데기장",
+            "category": "기타",
+            "time": "5분",
+            "servings": 4,
+            "difficulty": "쉬움",
+            "favorite": false,
+            "img": "",
+            "ingredients": [
+                  "고춧가루 4큰술(4T)",
+                  "고추씨 3큰술(3T)",
+                  "국간장 2큰술(2T)",
+                  "물엿 2큰술(2T)",
+                  "참치액 2큰술(2T)",
+                  "매실청 1큰술(1T)",
+                  "굵게 다진 마늘 1큰술",
+                  "참기름",
+                  "생선회(광어, 우럭, 방어 등)"
+            ],
+            "steps": [
+                  "볼에 고춧가루 4T, 고추씨 3T, 국간장 2T, 물엿 2T, 참치액 2T, 매실청 1T를 넣습니다.",
+                  "양념이 겉돌지 않도록 숟가락으로 꾹꾹 누르며 고르게 잘 섞어 다데기 베이스를 만듭니다.",
+                  "먹기 직전에 베이스 양념장 1큰술을 덜어내고, 굵게 다진 마늘 1큰술과 참기름을 넉넉히 둘러 섞어줍니다.",
+                  "흰살 생선회나 방어회, 막회에 듬뿍 찍어 쌈을 싸 먹거나 회덮밥 양념으로 곁들여 즐깁니다."
+            ],
+            "notes": "고추씨가 들어가 칼칼하고 씹는 식감이 좋습니다. 베이스 양념은 냉장고에 두고 숙성해서 쓸수록 고춧가루 풋내가 사라지고 깊은 맛이 납니다."
+      },
+      {
+            "id": "recipe-user-16",
+            "title": "집코바 치킨 (순살 양념구이)",
+            "category": "한식",
+            "time": "25분",
+            "servings": 3,
+            "difficulty": "쉬움",
+            "favorite": true,
+            "img": "",
+            "ingredients": [
+                  "닭다리살 700g",
+                  "떡(떡볶이용) 취향껏",
+                  "대파 2대",
+                  "청양고추 2개",
+                  "참깨 2스푼",
+                  "진간장 2스푼",
+                  "설탕 2스푼",
+                  "고춧가루 3스푼",
+                  "굴소스 1스푼",
+                  "맛술 2스푼",
+                  "물엿 4스푼",
+                  "케첩 1스푼",
+                  "고추장 0.5스푼",
+                  "다진 마늘 1스푼",
+                  "치킨스톡 0.5스푼",
+                  "물 1스푼",
+                  "미원 한꼬집",
+                  "식용유 약간"
+            ],
+            "steps": [
+                  "기름을 살짝 두른 프라이팬에 닭다리살 700g을 지방(껍질) 쪽부터 올려 중불에서 노릇하게 구워줍니다.",
+                  "앞뒷면을 골고루 굽다가 한 입 사이즈로 먹기 좋게 자르고, 손가락 한 마디 크기로 썬 대파를 함께 넣어 중약불에서 천천히 구워 파향을 냅니다.",
+                  "볼에 진간장 2T, 설탕 2T, 고춧가루 3T, 굴소스 1T, 맛술 2T, 물엿 4T, 케첩 1T, 고추장 0.5T, 다진 마늘 1T, 치킨스톡 0.5T, 물 1T, 미원 한 꼬집을 잘 섞어 양념을 만듭니다.",
+                  "구운 파는 잠시 접시에 빼두고, 팬에 양념장을 부은 뒤 떡 취향껏과 송송 썬 청양고추 2개를 넣고 양념이 착 달라붙도록 센 불에서 졸이듯 볶아줍니다.",
+                  "윤기 나는 짙은 양념 색감이 올라오면 빼두었던 구운 파를 위에 얹어 가볍게 섞고, 참깨를 솔솔 뿌려 완성합니다."
+            ],
+            "notes": "닭다리살 자체의 기름으로 껍질을 바삭하게 굽는 것이 핵심입니다. 남은 양념에 밥과 김가루, 참기름을 넣고 비벼 먹는 치밥을 강력 추천합니다."
+      },
+      {
             "id": "recipe-sample-1",
             "title": "김치볶음밥",
             "category": "한식",
@@ -964,7 +1093,7 @@
     // Load from LocalStorage
     function loadRecipes() {
       try {
-        const currentVersion = 'v2_user_recipes_10';
+        const currentVersion = 'v4_user_recipes_16';
         const savedVersion = localStorage.getItem('my_recipe_vault_version');
         const stored = localStorage.getItem('my_recipe_vault_data');
         if (stored && savedVersion === currentVersion) {
@@ -999,18 +1128,20 @@
 
     // Extract all unique ingredients
     function getAllUniqueIngredients() {
+      const priority = ['돼지고기', '소고기', '계란', '대파', '양파', '마늘', '고추', '부추', '버섯', '두부'];
       const counts = {};
       recipes.forEach(r => {
         (r.ingredients || []).forEach(ing => {
           const name = cleanIngredientName(ing);
-          if (name && name.length >= 1) {
+          if (name && name.length >= 2 && !priority.includes(name)) {
             counts[name] = (counts[name] || 0) + 1;
           }
         });
       });
-      return Object.entries(counts)
+      const sorted = Object.entries(counts)
         .sort((a, b) => b[1] - a[1])
         .map(entry => entry[0]);
+      return [...priority, ...sorted];
     }
 
     // Toast helper
@@ -1089,8 +1220,68 @@
     }
 
     // Filter Logic
+    
+    // Smart Culinary Synonym & Sub-part Mapping
+    const SYNONYM_MAP = {
+      '돼지고기': ['돼지고기', '돼지', '목살', '앞다리살', '뒷다리살', '삼겹살', '삼겹', '대패', '항정살', '가브리살', '갈매기살', '통전지', '전지', '잠봉', '베이컨', '제육'],
+      '돼지': ['돼지', '돼지고기', '목살', '앞다리살', '뒷다리살', '삼겹살', '전지', '잠봉', '제육'],
+      '삼겹살': ['삼겹살', '삼겹', '대패삼겹', '오겹살'],
+      '목살': ['목살', '돼지 목살', '돼지고기 목살'],
+      '앞다리살': ['앞다리살', '돼지 앞다리살', '전지', '통전지'],
+
+      '소고기': ['소고기', '쇠고기', '한우', '우둔살', '우둔', '홍두깨살', '홍두깨', '부채살', '차돌박이', '차돌', '양지', '채끝', '소불고기', '불고기', '육회', '샤브샤브용 소고기'],
+      '쇠고기': ['소고기', '쇠고기', '한우', '우둔살', '부채살', '차돌박이', '소불고기', '육회'],
+      '차돌박이': ['차돌박이', '차돌'],
+      '부채살': ['부채살', '소고기'],
+      '우둔살': ['우둔살', '우둔', '소고기'],
+      '불고기': ['불고기', '소불고기', '돼지불고기'],
+
+      '닭고기': ['닭고기', '닭', '닭가슴살', '닭가슴', '닭다리살', '닭다리', '닭안심', '닭봉', '닭날개', '치킨'],
+      '닭': ['닭', '닭고기', '닭가슴살', '닭다리살', '닭안심', '치킨'],
+
+      '계란': ['계란', '달걀', '계란물', '달걀물', '노른자', '흰자', '반숙란', '아지타마고', '계란후라이'],
+      '달걀': ['계란', '달걀', '계란물', '달걀물', '노른자', '흰자', '반숙란', '아지타마고'],
+
+      '대파': ['대파', '쪽파', '실파', '파기름'],
+      '파': ['대파', '쪽파', '실파', '파기름'],
+
+      '고추': ['고추', '청양고추', '꽈리고추', '홍고추', '풋고추'],
+      '청양고추': ['청양고추'],
+      '꽈리고추': ['꽈리고추'],
+
+      '마늘': ['마늘', '다진 마늘', '간마늘', '통마늘', '편마늘', '마늘채'],
+      '간장': ['간장', '진간장', '양조간장', '국간장', '맛간장'],
+      '버섯': ['버섯', '표고버섯', '팽이버섯', '느타리버섯', '새송이버섯', '양송이버섯', '표고', '팽이', '느타리'],
+      '두부': ['두부', '순두부', '연두부'],
+      '면': ['면', '라면', '파스타', '소면', '중면', '우동', '스파게티', '펜네']
+    };
+
+    function getSearchTerms(query) {
+      const q = query.trim().toLowerCase();
+      if (SYNONYM_MAP[q]) return SYNONYM_MAP[q];
+
+      if (q.endsWith('고기') && q.length > 2) {
+        const base = q.slice(0, -2);
+        if (SYNONYM_MAP[base]) return SYNONYM_MAP[base];
+        return [q, base];
+      }
+      return [q];
+    }
+
+    function checkTermMatch(term, text) {
+      if (!text) return false;
+      const t = text.toLowerCase();
+      if (term === '파') {
+        if (t.includes('양파') && !t.includes('대파') && !t.includes('쪽파') && !t.includes('실파') && !t.includes('파기름')) {
+          return false;
+        }
+      }
+      return t.includes(term.toLowerCase());
+    }
+
     function getFilteredRecipes() {
       const q = searchQuery.trim().toLowerCase();
+      const searchTerms = q ? getSearchTerms(q) : [];
 
       return recipes.filter(recipe => {
         // Category filter
@@ -1100,33 +1291,36 @@
           return false;
         }
 
-        // Text Search
+        // Text Search with Semantic / Synonym Expansion
         if (q) {
-          const matchTitle = (recipe.title || '').toLowerCase().includes(q);
-          const matchIng = (recipe.ingredients || []).some(i => i.toLowerCase().includes(q));
-          const matchCat = (recipe.category || '').toLowerCase().includes(q);
+          const matchTitle = searchTerms.some(term => checkTermMatch(term, recipe.title || ''));
+          const matchIng = searchTerms.some(term => 
+            (recipe.ingredients || []).some(i => checkTermMatch(term, i))
+          );
+          const matchCat = searchTerms.some(term => checkTermMatch(term, recipe.category || ''));
 
           if (searchMode === 'title' && !matchTitle) return false;
           if (searchMode === 'ingredient' && !matchIng) return false;
           if (searchMode === 'all' && !matchTitle && !matchIng && !matchCat) return false;
         }
 
-        // Multi-ingredient filter
+        // Multi-ingredient filter with Semantic / Synonym Expansion
         if (selectedIngredients.size > 0) {
           const recipeIngList = (recipe.ingredients || []).map(i => cleanIngredientName(i).toLowerCase());
           const targetIngs = Array.from(selectedIngredients).map(i => i.toLowerCase());
 
-          if (matchMode === 'and') {
-            // Must contain ALL selected ingredients
-            const hasAll = targetIngs.every(target => 
-              recipeIngList.some(rIng => rIng.includes(target) || target.includes(rIng))
+          const checkRecipeHasTarget = (target) => {
+            const terms = getSearchTerms(target);
+            return terms.some(term =>
+              recipeIngList.some(rIng => checkTermMatch(term, rIng))
             );
+          };
+
+          if (matchMode === 'and') {
+            const hasAll = targetIngs.every(target => checkRecipeHasTarget(target));
             if (!hasAll) return false;
           } else {
-            // Must contain AT LEAST ONE
-            const hasAny = targetIngs.some(target => 
-              recipeIngList.some(rIng => rIng.includes(target) || target.includes(rIng))
-            );
+            const hasAny = targetIngs.some(target => checkRecipeHasTarget(target));
             if (!hasAny) return false;
           }
         }
@@ -1394,15 +1588,10 @@ ${recipe.notes ? `## 요리 팁 & 메모\n> ${recipe.notes}\n` : ''}
 
       if (!text) return result;
 
-      const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-      if (lines.length === 0) return result;
-
-      // 1. Check Frontmatter (YAML)
+      // 1. Check Frontmatter
       const fmMatch = text.match(/^---\s*\n([\s\S]*?)\n---/);
       let bodyText = text;
-      let hasFrontmatter = false;
       if (fmMatch) {
-        hasFrontmatter = true;
         const fmContent = fmMatch[1];
         bodyText = text.replace(fmMatch[0], '');
 
@@ -1424,108 +1613,48 @@ ${recipe.notes ? `## 요리 팁 & 메모\n> ${recipe.notes}\n` : ''}
         }
       }
 
-      // 2. Check for explicit headers (## 재료 / ## 조리 순서)
+      // 2. Title from # H1 if missing
+      if (!result.title) {
+        const h1Match = bodyText.match(/^#\s+(.+)$/m);
+        if (h1Match) result.title = h1Match[1].trim();
+      }
+
+      // 3. Extract Ingredients from body (e.g. ## 재료 or - [[재료]])
       const ingSectionMatch = bodyText.match(/##\s*(?:재료|준비|준비\s*재료|Ingredients)[\s\S]*?(?=##|$)/i);
+      if (ingSectionMatch) {
+        const lines = ingSectionMatch[0].split('\n').filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'));
+        if (lines.length > 0) {
+          result.ingredients = lines.map(l => l.replace(/^[-*]\s*/, '').replace(/\[\[|\]\]/g, '').trim());
+        }
+      } else if (result.ingredients.length === 0) {
+        // Fallback: search all [[wiki]] links
+        const wikiMatches = bodyText.match(/\[\[(.*?)\]\]/g);
+        if (wikiMatches) {
+          result.ingredients = wikiMatches.map(w => w.replace(/\[\[|\]\]/g, '').trim());
+        }
+      }
+
+      // 4. Extract Steps from body (e.g. ## 조리 순서 or 1. 2. 3.)
       const stepSectionMatch = bodyText.match(/##\s*(?:조리\s*순서|만드는\s*법|조리법|순서|Steps)[\s\S]*?(?=##|$)/i);
-
-      if (ingSectionMatch || stepSectionMatch || hasFrontmatter) {
-        if (!result.title) {
-          const h1Match = bodyText.match(/^#\s+(.+)$/m);
-          if (h1Match) result.title = h1Match[1].trim();
-          else if (lines.length > 0) result.title = lines[0].replace(/^#+\s*/, '').trim();
+      if (stepSectionMatch) {
+        const lines = stepSectionMatch[0].split('\n').filter(l => /^\d+\./.test(l.trim()));
+        if (lines.length > 0) {
+          result.steps = lines.map(l => l.replace(/^\d+\.\s*/, '').trim());
         }
+      }
 
-        if (ingSectionMatch) {
-          const ingLines = ingSectionMatch[0].split('\n').filter(l => l.trim().startsWith('-') || l.trim().startsWith('*'));
-          if (ingLines.length > 0) {
-            result.ingredients = ingLines.map(l => l.replace(/^[-*]\s*/, '').replace(/\[\[|\]\]/g, '').trim());
-          }
-        } else if (result.ingredients.length === 0) {
-          const wikiMatches = bodyText.match(/\[\[(.*?)\]\]/g);
-          if (wikiMatches) {
-            result.ingredients = wikiMatches.map(w => w.replace(/\[\[|\]\]/g, '').trim());
-          }
+      // 5. Fallback if no numbered steps found
+      if (result.steps.length === 0) {
+        const numLines = bodyText.split('\n').filter(l => /^\d+\./.test(l.trim()));
+        if (numLines.length > 0) {
+          result.steps = numLines.map(l => l.replace(/^\d+\.\s*/, '').trim());
         }
+      }
 
-        if (stepSectionMatch) {
-          const stepLines = stepSectionMatch[0].split('\n').filter(l => /^\d+\./.test(l.trim()));
-          if (stepLines.length > 0) {
-            result.steps = stepLines.map(l => l.replace(/^\d+\.\s*/, '').trim());
-          }
-        }
-        if (result.steps.length === 0) {
-          const numLines = bodyText.split('\n').filter(l => /^\d+\./.test(l.trim()));
-          if (numLines.length > 0) {
-            result.steps = numLines.map(l => l.replace(/^\d+\.\s*/, '').trim());
-          }
-        }
-
-        const notesMatch = bodyText.match(/##\s*(?:팁|메모|참고|Notes)[\s\S]*?(?=##|$)/i);
-        if (notesMatch) {
-          result.notes = notesMatch[0].replace(/^##.*?\n/, '').replace(/^>\s*/gm, '').trim();
-        }
-      } else {
-        // 3. Natural Everyday Recipe Format (like user's notepad/obsidian style!)
-        result.title = lines[0].replace(/^[#\s]+/, '').trim();
-
-        const verbEndings = ['한다', '볶는다', '섞는다', '끓인다', '넣는다', '끝', '준다', '굽는다', '담는다', '뺀다', '썬다', '부친다', '졸인다', '익힌다', '둔다', '바른다', '버무린다', '마친다', '올린다', '식힌다'];
-        const noteKeywords = ['계량', '팁', '메모', '참고', '주의', '보관', '밥수저'];
-        const notesArr = [];
-        let inNotesBlock = false;
-
-        for (let i = 1; i < lines.length; i++) {
-          const line = lines[i];
-
-          // Skip pure horizontal rule / divider lines (ㅡㅡㅡ, ---, ===, ***)
-          if (/^[ㅡ\-=_*~\s]{1,}$/.test(line)) {
-            continue;
-          }
-
-          // Check if this line starts or belongs to note block
-          const isNoteLine = noteKeywords.some(k => line.includes(k));
-          if (isNoteLine) {
-            inNotesBlock = true;
-            notesArr.push(line);
-            continue;
-          }
-
-          if (inNotesBlock) {
-            const isVerb = verbEndings.some(v => line.endsWith(v));
-            if (isVerb || line.length > 28) {
-              inNotesBlock = false;
-            } else {
-              notesArr.push(line);
-              continue;
-            }
-          }
-
-          // Check if cooking step
-          const isNumbered = /^\d+[\.\)]\s*/.test(line);
-          const isVerbEnding = verbEndings.some(v => line.endsWith(v));
-          const hasCookingConnectors = (line.includes('고,') || line.includes('볶다가') || line.includes('넣고') || line.includes('식었을 때') || line.includes('후에') || line.includes('불을'));
-
-          if (isNumbered || isVerbEnding || (line.length > 20 && hasCookingConnectors)) {
-            const cleanStep = line.replace(/^\d+[\.\)]\s*/, '').trim();
-            result.steps.push(cleanStep);
-          } else {
-            // Ingredient / seasoning line
-            result.ingredients.push(line);
-          }
-        }
-
-        if (notesArr.length > 0) {
-          result.notes = notesArr.join('\n');
-        }
-
-        // Smart Category Detection
-        const fullContent = text.toLowerCase();
-        if (fullContent.includes('파스타') || fullContent.includes('버터') || fullContent.includes('바질') || fullContent.includes('치즈') || fullContent.includes('올리브오일') || fullContent.includes('스테이크')) {
-          result.category = '양식';
-        } else if (fullContent.includes('된장') || fullContent.includes('간장') || fullContent.includes('고추장') || fullContent.includes('김치') || fullContent.includes('멸치') || fullContent.includes('참기름') || fullContent.includes('꽈리고추') || fullContent.includes('마늘')) {
-          result.category = '한식';
-        } else if (fullContent.includes('우동') || fullContent.includes('초밥') || fullContent.includes('라멘') || fullContent.includes('짜장') || fullContent.includes('짬뽕')) {
-          result.category = '일식/중식';
-        }
+      // 6. Notes
+      const notesMatch = bodyText.match(/##\s*(?:팁|메모|참고|Notes)[\s\S]*?(?=##|$)/i);
+      if (notesMatch) {
+        result.notes = notesMatch[0].replace(/^##.*?\n/, '').replace(/^>\s*/gm, '').trim();
       }
 
       return result;
@@ -1814,84 +1943,6 @@ ${recipe.notes ? `## 요리 팁 & 메모\n> ${recipe.notes}\n` : ''}
         renderRecipeGrid();
       });
 
-      // Obsidian Modal Open & Close
-      document.getElementById('btn-open-obsidian').addEventListener('click', () => {
-        document.getElementById('obsidian-input').value = '';
-        document.getElementById('modal-obsidian').classList.remove('hidden');
-      });
-      document.getElementById('btn-close-obsidian').addEventListener('click', () => {
-        document.getElementById('modal-obsidian').classList.add('hidden');
-      });
-
-      // Obsidian .md File Upload
-      const inputMdFile = document.getElementById('input-obsidian-file');
-      if (inputMdFile) {
-        inputMdFile.addEventListener('change', (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            document.getElementById('obsidian-input').value = event.target.result;
-            showToast(file.name + ' 파일을 불러왔습니다. [레시피로 변환하기]를 누르세요.');
-          };
-          reader.readAsText(file);
-        });
-      }
-
-      // Obsidian Sample Load
-      document.getElementById('btn-load-sample-md').addEventListener('click', () => {
-        document.getElementById('obsidian-input').value = `---
-title: 소고기 미역국
-category: 한식
-time: 30분
-difficulty: 보통
-ingredients: [소고기, 미역, 다진 마늘, 국간장, 참기름]
----
-
-# 소고기 미역국
-
-## 준비 재료
-- [[소고기]] 양지 150g
-- 건[[미역]] 15g
-- [[다진 마늘]] 1큰술
-- [[국간장]] 2큰술
-- [[참기름]] 2큰술
-- 물 1.2L
-
-## 조리 순서
-1. 건미역은 찬물에 15분간 불린 뒤 먹기 좋은 크기로 썹니다.
-2. 냄비에 참기름을 두르고 소고기와 다진 마늘을 넣고 달달 볶습니다.
-3. 소고기 겉면이 익으면 불린 미역과 국간장 1큰술을 넣고 함께 볶습니다.
-4. 물 1.2L를 붓고 센 불에서 끓이다가 끓어오르면 중약불로 줄여 20분간 푹 끓여줍니다.
-
-## 팁 & 메모
-> 미역국은 오래 끓일수록 국물이 깊어집니다.`;
-      });
-
-      // Parse Obsidian
-      document.getElementById('btn-parse-obsidian').addEventListener('click', () => {
-        const text = document.getElementById('obsidian-input').value.trim();
-        if (!text) {
-          showToast('옵시디언 마크다운 텍스트를 입력해주세요.', false);
-          return;
-        }
-
-        const parsed = parseObsidianText(text);
-        document.getElementById('modal-obsidian').classList.add('hidden');
-
-        // Pre-fill Add Form
-        openRecipeForm();
-        if (parsed.title) document.getElementById('form-title').value = parsed.title;
-        if (parsed.category) document.getElementById('form-category').value = parsed.category;
-        if (parsed.time) document.getElementById('form-time').value = parsed.time;
-        if (parsed.difficulty) document.getElementById('form-difficulty').value = parsed.difficulty;
-        if (parsed.ingredients.length > 0) document.getElementById('form-ingredients').value = parsed.ingredients.join('\n');
-        if (parsed.steps.length > 0) document.getElementById('form-steps').value = parsed.steps.join('\n');
-        if (parsed.notes) document.getElementById('form-notes').value = parsed.notes;
-
-        showToast('옵시디언 노트가 성공적으로 파싱되었습니다! 내용을 확인 후 저장하세요.');
-      });
-
       // Share & Deploy Modal
       document.getElementById('btn-open-share').addEventListener('click', () => {
         document.getElementById('modal-share').classList.remove('hidden');
@@ -1919,10 +1970,7 @@ ingredients: [소고기, 미역, 다진 마늘, 국간장, 참기름]
         showToast("index.html 파일이 다운로드되었습니다!");
       };
 
-      const btnDownloadHtml = document.getElementById("btn-download-html");
-      if (btnDownloadHtml) {
-        btnDownloadHtml.addEventListener("click", downloadSelfHTML);
-      }
+
 
       document.getElementById('btn-export-all-md').addEventListener('click', exportAllJSON);
       document.getElementById('btn-download-json-backup').addEventListener('click', exportAllJSON);
