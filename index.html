@@ -461,6 +461,9 @@
               <input type="file" id="input-restore-json" accept=".json" class="hidden">
             </label>
           </div>
+          <button id="btn-reset-factory" type="button" class="w-full mt-2 py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-medium rounded-xl text-center border border-rose-200/60 transition-colors">
+            🔄 기본 레시피북으로 완전 초기화
+          </button>
         </div>
 
       </div>
@@ -1285,17 +1288,54 @@
     // Load from LocalStorage
     function loadRecipes() {
       try {
-        const currentVersion = 'v6_user_recipes_23';
-        const savedVersion = localStorage.getItem('my_recipe_vault_version');
+        const currentVersion = 'v7_smart_merge';
         const stored = localStorage.getItem('my_recipe_vault_data');
-        if (stored && savedVersion === currentVersion) {
-          recipes = JSON.parse(stored);
-        } else {
+        const deletedIds = new Set(JSON.parse(localStorage.getItem('my_recipe_deleted_ids') || '[]'));
+
+        if (!stored) {
+          // First visit: initialize with defaults
           recipes = DEFAULT_RECIPES;
           localStorage.setItem('my_recipe_vault_version', currentVersion);
           saveRecipes();
+          return;
+        }
+
+        // Parse user's currently saved recipes (with all custom edits)
+        let userRecipes = JSON.parse(stored);
+        if (!Array.isArray(userRecipes) || userRecipes.length === 0) {
+          recipes = DEFAULT_RECIPES;
+          saveRecipes();
+          return;
+        }
+
+        // Smart Merge: Preserve ALL user modifications & custom recipes
+        // Find only NEW recipes from DEFAULT_RECIPES that do not exist yet in user's data
+        const existingIds = new Set(userRecipes.map(r => r.id));
+        const existingTitles = new Set(userRecipes.map(r => (r.title || '').trim().toLowerCase()));
+
+        const newlyAddedRecipes = DEFAULT_RECIPES.filter(defaultRecipe => {
+          if (deletedIds.has(defaultRecipe.id)) return false; // Respect user's explicit deletion
+          const idMatch = existingIds.has(defaultRecipe.id);
+          const titleMatch = existingTitles.has((defaultRecipe.title || '').trim().toLowerCase());
+          return !idMatch && !titleMatch;
+        });
+
+        if (newlyAddedRecipes.length > 0) {
+          // Append newly added recipes while keeping existing customized recipes intact
+          recipes = [...userRecipes, ...newlyAddedRecipes];
+          localStorage.setItem('my_recipe_vault_version', currentVersion);
+          saveRecipes();
+
+          setTimeout(() => {
+            showToast(`수정하신 내용은 그대로 유지되고, 새 레시피 ${newlyAddedRecipes.length}개가 안전하게 추가되었습니다!`);
+          }, 600);
+        } else {
+          // Keep user's custom edits completely intact
+          recipes = userRecipes;
+          localStorage.setItem('my_recipe_vault_version', currentVersion);
         }
       } catch (e) {
+        console.error('Failed to load/merge recipes:', e);
         recipes = DEFAULT_RECIPES;
       }
     }
@@ -2046,15 +2086,40 @@ ${recipe.notes ? `## 요리 팁 & 메모\n> ${recipe.notes}\n` : ''}
         document.getElementById('modal-detail').classList.add('hidden');
         openRecipeForm(currentViewingRecipe);
       });
-      document.getElementById('btn-delete-recipe').addEventListener('click', () => {
+      const btnDeleteRecipe = document.getElementById('btn-delete-recipe');
+      btnDeleteRecipe.addEventListener('click', () => {
         if (!currentViewingRecipe) return;
+        
+        // Two-step inline confirmation (no window.confirm)
+        if (btnDeleteRecipe.dataset.confirming !== 'true') {
+          btnDeleteRecipe.dataset.confirming = 'true';
+          btnDeleteRecipe.textContent = '정말 삭제할까요? (한번 더 클릭)';
+          setTimeout(() => {
+            btnDeleteRecipe.dataset.confirming = 'false';
+            btnDeleteRecipe.textContent = '레시피 삭제';
+          }, 3500);
+          return;
+        }
+
+        btnDeleteRecipe.dataset.confirming = 'false';
+        btnDeleteRecipe.textContent = '레시피 삭제';
         const targetId = currentViewingRecipe.id;
         recipes = recipes.filter(r => r.id !== targetId);
+
+        // Record deleted id so smart merge will not restore it
+        try {
+          const deletedList = JSON.parse(localStorage.getItem('my_recipe_deleted_ids') || '[]');
+          if (!deletedList.includes(targetId)) {
+            deletedList.push(targetId);
+            localStorage.setItem('my_recipe_deleted_ids', JSON.stringify(deletedList));
+          }
+        } catch (e) {}
+
         saveRecipes();
         document.getElementById('modal-detail').classList.add('hidden');
         renderQuickIngredients();
         renderRecipeGrid();
-        showToast('레시피가 삭제되었습니다.');
+        showToast('레시피가 안전하게 삭제되었습니다.');
       });
 
       // Add Modal Open & Close
@@ -2144,6 +2209,36 @@ ${recipe.notes ? `## 요리 팁 & 메모\n> ${recipe.notes}\n` : ''}
       });
       document.getElementById('btn-close-share-footer').addEventListener('click', () => {
         document.getElementById('modal-share').classList.add('hidden');
+      });
+
+      const btnResetFactory = document.getElementById('btn-reset-factory');
+      btnResetFactory.addEventListener('click', () => {
+        // Two-step inline confirmation (no window.confirm)
+        if (btnResetFactory.dataset.confirming !== 'true') {
+          btnResetFactory.dataset.confirming = 'true';
+          btnResetFactory.textContent = '⚠️ 정말 전체 초기화할까요? (한번 더 클릭)';
+          btnResetFactory.classList.add('bg-rose-600', 'text-white');
+          setTimeout(() => {
+            btnResetFactory.dataset.confirming = 'false';
+            btnResetFactory.textContent = '🔄 기본 레시피북으로 완전 초기화';
+            btnResetFactory.classList.remove('bg-rose-600', 'text-white');
+          }, 3500);
+          return;
+        }
+
+        btnResetFactory.dataset.confirming = 'false';
+        btnResetFactory.textContent = '🔄 기본 레시피북으로 완전 초기화';
+        btnResetFactory.classList.remove('bg-rose-600', 'text-white');
+
+        localStorage.removeItem('my_recipe_vault_data');
+        localStorage.removeItem('my_recipe_deleted_ids');
+        localStorage.removeItem('my_recipe_vault_version');
+        recipes = DEFAULT_RECIPES;
+        saveRecipes();
+        document.getElementById('modal-share').classList.add('hidden');
+        renderQuickIngredients();
+        renderRecipeGrid();
+        showToast('기본 레시피북으로 깨끗하게 초기화되었습니다.');
       });
 
       // Backup JSON
